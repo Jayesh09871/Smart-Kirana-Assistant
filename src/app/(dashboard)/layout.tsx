@@ -6,6 +6,8 @@ import { useEffect } from 'react';
 import Header from '@/components/layout/Header';
 import BottomNav from '@/components/layout/BottomNav';
 
+export const dynamic = 'force-dynamic';
+
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const { merchant, isLoading } = useAuth();
   const router = useRouter();

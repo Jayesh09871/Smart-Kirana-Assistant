@@ -4,6 +4,8 @@ import type { Metadata, Viewport } from 'next';
 import { Toaster } from 'react-hot-toast';
 import './globals.css';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
   title: 'Smart Kirana Assistant',
   description: 'AI-powered shop management for local merchants',
