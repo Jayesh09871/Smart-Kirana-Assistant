@@ -7,6 +7,9 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
+  swcMinify: true,
+  compress: true,
+  poweredByHeader: false,
 };
 
 export default nextConfig;
