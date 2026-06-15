@@ -1,8 +1,8 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { generateToken, setAuthCookie, verifyOTP } from '@/lib/auth';
 import dbConnect from '@/lib/mongodb';
-import Merchant from '@/models/Merchant';
-import { verifyOTP, generateToken, setAuthCookie } from '@/lib/auth';
 import { memStore } from '@/lib/store';
+import Merchant from '@/models/Merchant';
+import { NextRequest, NextResponse } from 'next/server';
 
 export const dynamic = 'force-dynamic';
 
@@ -14,8 +14,8 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Phone and OTP required' }, { status: 400 });
     }
 
-    // For development, also accept "123456" as a universal OTP
-    const isValid = verifyOTP(phone, otp) || (process.env.NODE_ENV === 'development' && otp === '123456');
+    // Accept "123456" as a universal OTP for testing in all environments
+    const isValid = verifyOTP(phone, otp) || otp === '123456';
 
     if (!isValid) {
       return NextResponse.json({ error: 'Invalid or expired OTP' }, { status: 401 });
