@@ -8,6 +8,9 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   output: 'standalone',
+  experimental: {
+    serverMinification: false,
+  },
 };
 
 export default nextConfig;

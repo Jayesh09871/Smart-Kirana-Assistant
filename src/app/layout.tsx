@@ -1,8 +1,10 @@
-import type { Metadata, Viewport } from 'next';
-import './globals.css';
 import { AuthProvider } from '@/context/AuthContext';
 import { I18nProvider } from '@/context/I18nContext';
+import type { Metadata, Viewport } from 'next';
 import { Toaster } from 'react-hot-toast';
+import './globals.css';
+
+export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
   title: 'Smart Kirana Assistant',
