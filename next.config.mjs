@@ -10,9 +10,7 @@ const nextConfig = {
   swcMinify: true,
   compress: true,
   poweredByHeader: false,
-  generateEtags: false,
-  productionBrowserSourceMaps: false,
-  trailingSlash: false,
+  outputFileTracing: false,
 };
 
 export default nextConfig;
