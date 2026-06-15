@@ -7,7 +7,6 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
-  outputFileTracing: false,
 };
 
 export default nextConfig;
