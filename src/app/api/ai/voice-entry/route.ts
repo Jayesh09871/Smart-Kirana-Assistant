@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { processVoiceEntry } from '@/lib/groq';
 
+export const dynamic = 'force-dynamic';
+
 export async function POST(request: NextRequest) {
   try {
     const { transcription } = await request.json();

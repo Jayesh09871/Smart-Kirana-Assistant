@@ -4,6 +4,8 @@ import Product from '@/models/Product';
 import { getMerchantIdFromRequest } from '@/lib/auth';
 import { memStore } from '@/lib/store';
 
+export const dynamic = 'force-dynamic';
+
 function isMemId(id: string): boolean {
   return id.startsWith('mem_');
 }

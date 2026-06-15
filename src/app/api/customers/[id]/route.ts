@@ -6,6 +6,8 @@ import Reminder from '@/models/Reminder';
 import { getMerchantIdFromRequest } from '@/lib/auth';
 import { memStore } from '@/lib/store';
 
+export const dynamic = 'force-dynamic';
+
 // Helper: check if ID is from memory store
 function isMemId(id: string): boolean {
   return id.startsWith('mem_');

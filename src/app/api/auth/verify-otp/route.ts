@@ -4,6 +4,8 @@ import Merchant from '@/models/Merchant';
 import { verifyOTP, generateToken, setAuthCookie } from '@/lib/auth';
 import { memStore } from '@/lib/store';
 
+export const dynamic = 'force-dynamic';
+
 export async function POST(request: NextRequest) {
   try {
     const { phone, otp, name, shopName } = await request.json();

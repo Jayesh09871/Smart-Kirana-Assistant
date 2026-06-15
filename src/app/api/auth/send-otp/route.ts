@@ -3,6 +3,8 @@ import dbConnect from '@/lib/mongodb';
 import Merchant from '@/models/Merchant';
 import { generateOTP } from '@/lib/auth';
 
+export const dynamic = 'force-dynamic';
+
 export async function POST(request: NextRequest) {
   try {
     const { phone } = await request.json();

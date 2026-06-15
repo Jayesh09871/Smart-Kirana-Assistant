@@ -6,6 +6,8 @@ import { getMerchantIdFromRequest, isValidObjectId } from '@/lib/auth';
 import { getStockPredictions } from '@/lib/groq';
 import { memStore } from '@/lib/store';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET() {
   try {
     const merchantId = getMerchantIdFromRequest();

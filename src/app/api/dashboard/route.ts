@@ -7,6 +7,8 @@ import { getMerchantIdFromRequest, isValidObjectId } from '@/lib/auth';
 import { memStore } from '@/lib/store';
 import mongoose from 'mongoose';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET() {
   try {
     const merchantId = getMerchantIdFromRequest();

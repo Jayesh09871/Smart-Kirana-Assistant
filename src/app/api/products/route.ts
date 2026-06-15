@@ -4,6 +4,8 @@ import Product from '@/models/Product';
 import { getMerchantIdFromRequest, isValidObjectId } from '@/lib/auth';
 import { memStore } from '@/lib/store';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(request: NextRequest) {
   try {
     const merchantId = getMerchantIdFromRequest();

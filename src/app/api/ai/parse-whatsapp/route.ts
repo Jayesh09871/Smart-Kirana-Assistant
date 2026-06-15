@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { parseWhatsAppMessage } from '@/lib/groq';
 
+export const dynamic = 'force-dynamic';
+
 export async function POST(request: NextRequest) {
   try {
     const { message } = await request.json();
