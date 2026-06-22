@@ -86,12 +86,61 @@ export interface AIParsedEntry {
   confidence: number;
 }
 
+export interface AIParsedOrder {
+  customerName: string;
+  items: OrderItem[];
+  notes?: string;
+  confidence: number;
+}
+
 export interface StockPrediction {
   productName: string;
   currentStock: number;
   daysToFinish: number;
   dailyUsage: number;
   suggestion: string;
+}
+
+export interface OrderItem {
+  productId?: string;
+  productName: string;
+  quantity: number;
+  unit: string;
+  price?: number;
+}
+
+export interface Order {
+  _id?: string;
+  merchantId: string;
+  customerId?: string;
+  customerName: string;
+  customerPhone: string;
+  items: OrderItem[];
+  totalAmount: number;
+  notes?: string;
+  status: 'pending' | 'confirmed' | 'cancelled';
+  whatsappMessageId?: string;
+  createdAt?: Date;
+}
+
+export interface WhatsAppMessage {
+  _id?: string;
+  merchantId: string;
+  fromPhone: string;
+  toPhone: string;
+  messageBody: string;
+  messageId: string;
+  status: 'received' | 'processed' | 'reviewed' | 'failed';
+  parsedOrder?: string;
+  createdAt?: Date;
+}
+
+export interface WhatsAppDashboardData {
+  totalWhatsAppOrders: number;
+  ordersToday: number;
+  whatsAppRevenue: number;
+  mostOrderedProducts: { productName: string; count: number }[];
+  lowStockProducts: Product[];
 }
 
 export type Theme = 'light' | 'dark';

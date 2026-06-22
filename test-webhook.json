@@ -1,0 +1,39 @@
+{
+  "object": "whatsapp_business_account",
+  "entry": [
+    {
+      "id": "1736412267529652",
+      "changes": [
+        {
+          "value": {
+            "messaging_product": "whatsapp",
+            "metadata": {
+              "display_phone_number": "15556562797",
+              "phone_number_id": "1123847944153336"
+            },
+            "contacts": [
+              {
+                "profile": {
+                  "name": "Jayesh"
+                },
+                "wa_id": "916377362324"
+              }
+            ],
+            "messages": [
+              {
+                "from": "916377362324",
+                "id": "test-message-id-6",
+                "timestamp": "1782122710",
+                "text": {
+                  "body": "3 kg chawal aur 5 ltr doodh"
+                },
+                "type": "text"
+              }
+            ]
+          },
+          "field": "messages"
+        }
+      ]
+    }
+  ]
+}

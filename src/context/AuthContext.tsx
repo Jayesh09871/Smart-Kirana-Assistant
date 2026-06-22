@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
+import { createContext, ReactNode, useCallback, useContext, useEffect, useState } from 'react';
 
 interface Merchant {
   id: string;
@@ -8,6 +8,7 @@ interface Merchant {
   phone: string;
   shopName: string;
   language: 'en' | 'hi';
+  whatsappPhoneNumber?: string;
 }
 
 interface AuthContextType {

@@ -1,10 +1,10 @@
 'use client';
 
+import BottomNav from '@/components/layout/BottomNav';
+import Header from '@/components/layout/Header';
 import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
-import Header from '@/components/layout/Header';
-import BottomNav from '@/components/layout/BottomNav';
 
 export const dynamic = 'force-dynamic';
 

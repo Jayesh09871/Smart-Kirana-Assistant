@@ -1,10 +1,10 @@
-import { NextRequest, NextResponse } from 'next/server';
-import dbConnect from '@/lib/mongodb';
-import Customer from '@/models/Customer';
-import Transaction from '@/models/Transaction';
-import Reminder from '@/models/Reminder';
 import { getMerchantIdFromRequest } from '@/lib/auth';
+import dbConnect from '@/lib/mongodb';
 import { memStore } from '@/lib/store';
+import Customer from '@/models/Customer';
+import Reminder from '@/models/Reminder';
+import Transaction from '@/models/Transaction';
+import { NextRequest, NextResponse } from 'next/server';
 
 export const dynamic = 'force-dynamic';
 

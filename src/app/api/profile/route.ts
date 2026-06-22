@@ -1,8 +1,8 @@
-import { NextRequest, NextResponse } from 'next/server';
-import dbConnect from '@/lib/mongodb';
-import Merchant from '@/models/Merchant';
 import { getMerchantIdFromRequest, isValidObjectId } from '@/lib/auth';
+import dbConnect from '@/lib/mongodb';
 import { memStore } from '@/lib/store';
+import Merchant from '@/models/Merchant';
+import { NextRequest, NextResponse } from 'next/server';
 
 export const dynamic = 'force-dynamic';
 
@@ -38,21 +38,21 @@ export async function PUT(request: NextRequest) {
     const merchantId = getMerchantIdFromRequest();
     if (!merchantId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
-    const { name, shopName, language, businessType } = await request.json();
+    const { name, shopName, language, businessType, whatsappPhoneNumber } = await request.json();
 
     if (!isValidObjectId(merchantId)) {
-      const merchant = memStore.updateMerchant(merchantId, { name, shopName, language, businessType });
+      const merchant = memStore.updateMerchant(merchantId, { name, shopName, language, businessType, whatsappPhoneNumber });
       return NextResponse.json({ merchant });
     }
 
     try {
       await dbConnect();
       const merchant = await Merchant.findByIdAndUpdate(
-        merchantId, { $set: { name, shopName, language, businessType } }, { new: true }
+        merchantId, { $set: { name, shopName, language, businessType, whatsappPhoneNumber } }, { new: true }
       ).select('-password');
       return NextResponse.json({ merchant });
     } catch {
-      const merchant = memStore.updateMerchant(merchantId, { name, shopName, language, businessType });
+      const merchant = memStore.updateMerchant(merchantId, { name, shopName, language, businessType, whatsappPhoneNumber });
       return NextResponse.json({ merchant });
     }
   } catch (error) {

@@ -1,25 +1,26 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { useI18n } from '@/context/I18nContext';
 import { motion } from 'framer-motion';
 import {
-  User,
-  Store,
-  Globe,
-  LogOut,
-  Moon,
-  Sun,
   BarChart3,
   Bell,
-  Download,
   ChevronRight,
-  Loader2,
-  Save,
+  Download,
+  Globe,
   Info,
+  Loader2,
+  LogOut,
+  MessageSquare,
+  Moon,
+  Save,
+  Store,
+  Sun,
+  User,
 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 
 export default function SettingsPage() {
@@ -30,6 +31,7 @@ export default function SettingsPage() {
   const [name, setName] = useState(merchant?.name || '');
   const [shopName, setShopName] = useState(merchant?.shopName || '');
   const [language, setLanguage] = useState<'en' | 'hi'>(merchant?.language || 'en');
+  const [whatsappPhoneNumber, setWhatsappPhoneNumber] = useState(merchant?.whatsappPhoneNumber || '');
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
@@ -58,10 +60,10 @@ export default function SettingsPage() {
       const res = await fetch('/api/profile', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, shopName, language }),
+        body: JSON.stringify({ name, shopName, language, whatsappPhoneNumber }),
       });
       if (res.ok) {
-        updateMerchant({ name, shopName, language: language as 'en' | 'hi' });
+        updateMerchant({ name, shopName, language: language as 'en' | 'hi', whatsappPhoneNumber });
         setI18nLang(language as 'en' | 'hi');
         toast.success('Profile updated!');
       }
@@ -128,6 +130,20 @@ export default function SettingsPage() {
             type="text"
             value={shopName}
             onChange={(e) => setShopName(e.target.value)}
+            className="w-full px-3 py-2.5 bg-gray-50 dark:bg-slate-700 border border-gray-200 dark:border-slate-600 rounded-xl text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 outline-none"
+          />
+        </div>
+
+        <div>
+          <label className="text-xs font-medium text-gray-500 dark:text-gray-400 block mb-1">
+            <MessageSquare size={11} className="inline mr-1" />
+            WhatsApp Phone Number (with country code, e.g., 916377362324)
+          </label>
+          <input
+            type="text"
+            value={whatsappPhoneNumber}
+            onChange={(e) => setWhatsappPhoneNumber(e.target.value)}
+            placeholder="916377362324"
             className="w-full px-3 py-2.5 bg-gray-50 dark:bg-slate-700 border border-gray-200 dark:border-slate-600 rounded-xl text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 outline-none"
           />
         </div>

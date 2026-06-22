@@ -9,6 +9,7 @@ const translations: Record<string, Record<Lang, string>> = {
   // Navigation
   'nav.dashboard': { en: 'Home', hi: 'होम' },
   'nav.customers': { en: 'Customers', hi: 'ग्राहक' },
+  'nav.orders': { en: 'Orders', hi: 'ऑर्डर' },
   'nav.inventory': { en: 'Inventory', hi: 'इन्वेंटरी' },
   'nav.ai': { en: 'AI', hi: 'AI' },
   'nav.settings': { en: 'Settings', hi: 'सेटिंग्स' },

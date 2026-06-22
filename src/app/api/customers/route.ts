@@ -1,8 +1,8 @@
-import { NextRequest, NextResponse } from 'next/server';
-import dbConnect from '@/lib/mongodb';
-import Customer from '@/models/Customer';
 import { getMerchantIdFromRequest, isValidObjectId } from '@/lib/auth';
+import dbConnect from '@/lib/mongodb';
 import { memStore } from '@/lib/store';
+import Customer from '@/models/Customer';
+import { NextRequest, NextResponse } from 'next/server';
 
 export const dynamic = 'force-dynamic';
 

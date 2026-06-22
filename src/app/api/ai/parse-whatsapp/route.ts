@@ -1,5 +1,5 @@
-import { NextRequest, NextResponse } from 'next/server';
 import { parseWhatsAppMessage } from '@/lib/groq';
+import { NextRequest, NextResponse } from 'next/server';
 
 export const dynamic = 'force-dynamic';
 

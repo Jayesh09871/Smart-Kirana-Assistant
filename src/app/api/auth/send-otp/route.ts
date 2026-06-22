@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { generateOTP } from '@/lib/auth';
 import dbConnect from '@/lib/mongodb';
 import Merchant from '@/models/Merchant';
-import { generateOTP } from '@/lib/auth';
+import { NextRequest, NextResponse } from 'next/server';
 
 export const dynamic = 'force-dynamic';
 

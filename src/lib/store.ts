@@ -8,6 +8,7 @@ interface StoreMerchant {
   shopName: string;
   language: 'en' | 'hi';
   businessType: string;
+  whatsappPhoneNumber?: string;
   createdAt: Date;
 }
 
@@ -60,6 +61,39 @@ interface StoreReminder {
   createdAt: Date;
 }
 
+interface StoreOrderItem {
+  productName: string;
+  quantity: number;
+  unit: string;
+  price?: number;
+}
+
+interface StoreOrder {
+  _id: string;
+  merchantId: string;
+  customerId?: string;
+  customerName: string;
+  customerPhone?: string;
+  items: StoreOrderItem[];
+  totalAmount?: number;
+  notes?: string;
+  status: 'pending' | 'confirmed' | 'cancelled';
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+interface StoreWhatsAppMessage {
+  _id: string;
+  merchantId: string;
+  fromPhone: string;
+  toPhone: string;
+  messageBody: string;
+  messageId?: string;
+  status: 'received' | 'processed' | 'failed';
+  orderId?: string;
+  createdAt: Date;
+}
+
 // Persist idCounter on globalThis to avoid ID collisions across hot reloads
 declare global {
   // eslint-disable-next-line no-var
@@ -82,6 +116,8 @@ class MemoryStore {
   transactions: StoreTransaction[] = [];
   products: StoreProduct[] = [];
   reminders: StoreReminder[] = [];
+  orders: StoreOrder[] = [];
+  whatsappMessages: StoreWhatsAppMessage[] = [];
   seeded = false;
 
   // Merchant
@@ -103,6 +139,7 @@ class MemoryStore {
       shopName: data.shopName || 'My Shop',
       language: data.language || 'en',
       businessType: data.businessType || 'grocery',
+      whatsappPhoneNumber: data.whatsappPhoneNumber,
       createdAt: new Date(),
     };
     this.merchants.push(merchant);
@@ -286,6 +323,53 @@ class MemoryStore {
     };
     this.reminders.push(reminder);
     return reminder;
+  }
+
+  // WhatsApp Messages
+  createWhatsAppMessage(data: Omit<StoreWhatsAppMessage, '_id' | 'createdAt'>): StoreWhatsAppMessage {
+    const msg: StoreWhatsAppMessage = {
+      _id: genId(),
+      ...data,
+      createdAt: new Date(),
+    };
+    this.whatsappMessages.push(msg);
+    return msg;
+  }
+
+  findWhatsAppMessages(merchantId: string): StoreWhatsAppMessage[] {
+    return this.whatsappMessages.filter((m) => m.merchantId === merchantId);
+  }
+
+  // Orders
+  createOrder(data: Omit<StoreOrder, '_id' | 'createdAt' | 'updatedAt'>): StoreOrder {
+    const order: StoreOrder = {
+      _id: genId(),
+      ...data,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+    this.orders.push(order);
+    return order;
+  }
+
+  findOrders(merchantId: string, status?: string): StoreOrder[] {
+    let result = this.orders.filter((o) => o.merchantId === merchantId);
+    if (status) {
+      result = result.filter((o) => o.status === status);
+    }
+    return result.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+  }
+
+  findOrderById(id: string): StoreOrder | undefined {
+    return this.orders.find((o) => o._id === id);
+  }
+
+  updateOrder(id: string, data: Partial<StoreOrder>): StoreOrder | undefined {
+    const order = this.orders.find((o) => o._id === id);
+    if (!order) return undefined;
+    Object.assign(order, data);
+    order.updatedAt = new Date();
+    return order;
   }
 
   // Dashboard aggregation

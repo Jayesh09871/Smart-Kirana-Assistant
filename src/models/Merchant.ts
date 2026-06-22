@@ -7,6 +7,7 @@ export interface IMerchant extends Document {
   language: 'en' | 'hi';
   businessType: string;
   password: string;
+  whatsappPhoneNumber?: string;
   createdAt: Date;
 }
 
@@ -18,6 +19,7 @@ const MerchantSchema = new Schema<IMerchant>(
     language: { type: String, enum: ['en', 'hi'], default: 'en' },
     businessType: { type: String, default: 'grocery' },
     password: { type: String, default: '' },
+    whatsappPhoneNumber: { type: String, unique: true, sparse: true },
   },
   { timestamps: true }
 );

@@ -51,6 +51,7 @@ export async function POST(request: NextRequest) {
         phone: merchant.phone,
         shopName: merchant.shopName,
         language: merchant.language,
+        whatsappPhoneNumber: merchant.whatsappPhoneNumber,
       };
     } catch (dbError) {
       console.warn('[DEV] MongoDB unavailable, using fallback auth:', (dbError as Error).message);
