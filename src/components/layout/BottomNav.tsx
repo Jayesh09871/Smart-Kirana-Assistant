@@ -7,7 +7,7 @@ import { usePathname, useRouter } from 'next/navigation';
 const navItems = [
   { href: '/inventory', labelKey: 'nav.inventory', icon: Package },
   { href: '/customers', labelKey: 'nav.customers', icon: Users },
-  { href: '/orders', labelKey: 'nav.orders', icon: MessageSquare },
+  { href: '/orders', label: 'Reminders', icon: MessageSquare },
   { href: '/ai-assistant', labelKey: 'nav.ai', icon: Sparkles },
   { href: '/settings', labelKey: 'nav.settings', icon: MoreHorizontal },
 ];
@@ -38,7 +38,7 @@ export default function BottomNav() {
             >
               <Icon size={22} strokeWidth={isActive ? 2.5 : 2} />
               <span className={`text-[10px] ${isActive ? 'font-semibold' : 'font-medium'}`}>
-                {t(item.labelKey)}
+                {'label' in item ? item.label : t(item.labelKey)}
               </span>
             </button>
           );
