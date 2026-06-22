@@ -137,13 +137,13 @@ export default function SettingsPage() {
         <div>
           <label className="text-xs font-medium text-gray-500 dark:text-gray-400 block mb-1">
             <MessageSquare size={11} className="inline mr-1" />
-            WhatsApp Phone Number (with country code, e.g., 916377362324)
+            WhatsApp Phone Number (with country code, e.g., 919987654321)
           </label>
           <input
             type="text"
             value={whatsappPhoneNumber}
             onChange={(e) => setWhatsappPhoneNumber(e.target.value)}
-            placeholder="916377362324"
+            placeholder="919876543219"
             className="w-full px-3 py-2.5 bg-gray-50 dark:bg-slate-700 border border-gray-200 dark:border-slate-600 rounded-xl text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 outline-none"
           />
         </div>
