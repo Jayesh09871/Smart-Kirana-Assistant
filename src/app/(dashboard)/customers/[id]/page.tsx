@@ -12,6 +12,9 @@ import {
   MessageCircle,
   Trash2,
   Loader2,
+  Pencil,
+  Check,
+  X,
 } from 'lucide-react';
 import { formatCurrency, formatDate, getInitials } from '@/lib/utils';
 import toast from 'react-hot-toast';
@@ -41,6 +44,10 @@ export default function CustomerDetailPage() {
   const [loading, setLoading] = useState(true);
   const [deleting, setDeleting] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [showEditForm, setShowEditForm] = useState(false);
+  const [editName, setEditName] = useState('');
+  const [editPhone, setEditPhone] = useState('');
+  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     fetchCustomer();
@@ -91,6 +98,40 @@ export default function CustomerDetailPage() {
     } finally {
       setDeleting(false);
       setShowDeleteConfirm(false);
+    }
+  };
+
+  const openEditForm = () => {
+    if (!customer) return;
+    setEditName(customer.name);
+    setEditPhone(customer.phone || '');
+    setShowEditForm(true);
+    setShowDeleteConfirm(false);
+  };
+
+  const saveCustomerDetails = async () => {
+    if (!editName.trim()) {
+      toast.error('Customer name is required');
+      return;
+    }
+    setSaving(true);
+    try {
+      const res = await fetch(`/api/customers/${params.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: editName.trim(), phone: editPhone }),
+      });
+      if (res.ok) {
+        toast.success('Customer updated!');
+        setShowEditForm(false);
+        fetchCustomer();
+      } else {
+        toast.error('Failed to update customer');
+      }
+    } catch {
+      toast.error('Failed to update customer');
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -195,6 +236,7 @@ export default function CustomerDetailPage() {
             <Plus size={16} />
             Add Udhar
           </button>
+         
           <button
             onClick={() => router.push(`/entry/add?customerId=${customer._id}&type=payment`)}
             className="flex-1 bg-green-500 hover:bg-green-600 text-white py-2.5 rounded-xl text-sm font-medium flex items-center justify-center gap-1.5 transition-colors"
@@ -202,13 +244,20 @@ export default function CustomerDetailPage() {
             <Plus size={16} />
             Record Payment
           </button>
-        
           <button
+            onClick={openEditForm}
+            className="bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/40 text-blue-500 p-2.5 rounded-xl transition-colors"
+            title="Edit Customer Details"
+          >
+            <Pencil size={18} />
+          </button>
+           <button
             onClick={() => setShowDeleteConfirm(true)}
             className="bg-red-50 dark:bg-red-900/20 hover:bg-red-100 dark:hover:bg-red-900/40 text-red-500 p-2.5 rounded-xl transition-colors"
           >
             <Trash2 size={18} />
           </button>
+          
         </div>
 
         {/* Delete Confirmation */}
@@ -234,6 +283,59 @@ export default function CustomerDetailPage() {
               </button>
             </div>
           </div>
+        )}
+
+        {/* Edit Customer Form */}
+        {showEditForm && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            className="mt-3 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-xl border border-blue-200 dark:border-blue-800"
+          >
+            <h4 className="text-sm font-semibold text-blue-700 dark:text-blue-300 mb-3">Edit Customer Details</h4>
+            <div className="space-y-3">
+              <div>
+                <label className="text-xs font-medium text-gray-600 dark:text-gray-400 block mb-1">Name</label>
+                <input
+                  type="text"
+                  value={editName}
+                  onChange={(e) => setEditName(e.target.value)}
+                  className="w-full px-3 py-2.5 bg-white dark:bg-slate-700 border border-gray-200 dark:border-slate-600 rounded-lg text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none"
+                  placeholder="Customer name"
+                  autoFocus
+                />
+              </div>
+              <div>
+                <label className="text-xs font-medium text-gray-600 dark:text-gray-400 block mb-1">Phone</label>
+                <input
+                  type="tel"
+                  value={editPhone}
+                  onChange={(e) => setEditPhone(e.target.value.replace(/\D/g, '').slice(0, 10))}
+                  className="w-full px-3 py-2.5 bg-white dark:bg-slate-700 border border-gray-200 dark:border-slate-600 rounded-lg text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none"
+                  placeholder="9876543210"
+                  maxLength={10}
+                />
+              </div>
+              <div className="flex gap-2">
+                <button
+                  onClick={saveCustomerDetails}
+                  disabled={saving}
+                  className="flex-1 bg-blue-500 hover:bg-blue-600 text-white py-2 rounded-lg text-sm font-medium flex items-center justify-center gap-1.5 transition-colors disabled:opacity-50"
+                >
+                  {saving ? <Loader2 size={14} className="animate-spin" /> : <Check size={14} />}
+                  Save Changes
+                </button>
+                <button
+                  onClick={() => setShowEditForm(false)}
+                  className="flex-1 bg-gray-200 dark:bg-slate-700 text-gray-700 dark:text-gray-300 py-2 rounded-lg text-sm font-medium flex items-center justify-center gap-1.5 transition-colors"
+                >
+                  <X size={14} />
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </motion.div>
         )}
       </motion.div>
 
