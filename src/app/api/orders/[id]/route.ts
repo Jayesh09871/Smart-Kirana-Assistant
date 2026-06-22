@@ -8,6 +8,39 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export const dynamic = 'force-dynamic';
 
+export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
+  try {
+    const merchantId = getMerchantIdFromRequest();
+    if (!merchantId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
+    const orderId = params.id;
+
+    // Check if using memory store
+    if (getUseMemoryStore() || !isValidObjectId(merchantId)) {
+      const order = memStore.findOrderById(orderId);
+      if (!order || order.merchantId !== merchantId) {
+        return NextResponse.json({ error: 'Order not found' }, { status: 404 });
+      }
+
+      // Remove from memory store
+      memStore.orders = memStore.orders.filter(o => o._id !== orderId);
+      return NextResponse.json({ success: true });
+    }
+
+    // Using MongoDB
+    await dbConnect();
+    const result = await Order.deleteOne({ _id: orderId, merchantId });
+    if (result.deletedCount === 0) {
+      return NextResponse.json({ error: 'Order not found' }, { status: 404 });
+    }
+
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error('Delete order error:', error);
+    return NextResponse.json({ error: 'Failed to delete order' }, { status: 500 });
+  }
+}
+
 export async function PATCH(request: NextRequest, { params }: { params: { id: string } }) {
   try {
     const merchantId = getMerchantIdFromRequest();

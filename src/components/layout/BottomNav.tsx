@@ -1,15 +1,13 @@
 'use client';
 
 import { useI18n } from '@/context/I18nContext';
-import { LayoutDashboard, MessageSquare, MoreHorizontal, Package, Sparkles, Users } from 'lucide-react';
+import { MessageSquare, MoreHorizontal, Package, Sparkles, Users } from 'lucide-react';
 import { usePathname, useRouter } from 'next/navigation';
 
 const navItems = [
-  { href: '/', labelKey: 'nav.dashboard', icon: LayoutDashboard },
+  { href: '/inventory', labelKey: 'nav.inventory', icon: Package },
   { href: '/customers', labelKey: 'nav.customers', icon: Users },
   { href: '/orders', labelKey: 'nav.orders', icon: MessageSquare },
-  { href: '/whatsapp-messages', labelKey: 'WhatsApp', icon: MessageSquare },
-  { href: '/inventory', labelKey: 'nav.inventory', icon: Package },
   { href: '/ai-assistant', labelKey: 'nav.ai', icon: Sparkles },
   { href: '/settings', labelKey: 'nav.settings', icon: MoreHorizontal },
 ];

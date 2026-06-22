@@ -9,6 +9,7 @@ import {
   MessageSquare,
   Phone,
   Plus,
+  Trash2,
   X,
   XCircle
 } from 'lucide-react';
@@ -50,6 +51,7 @@ export default function OrdersPage() {
   const [filter, setFilter] = useState<'all' | 'pending'>('pending');
   const [editingOrder, setEditingOrder] = useState<Order | null>(null);
   const [updatingId, setUpdatingId] = useState<string | null>(null);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
   const [debugMode, setDebugMode] = useState(false);
   const [debugPayload, setDebugPayload] = useState('');
   const [sendingDebug, setSendingDebug] = useState(false);
@@ -77,6 +79,27 @@ export default function OrdersPage() {
     const interval = setInterval(fetchOrders, 10000);
     return () => clearInterval(interval);
   }, [fetchOrders]);
+
+  const confirmDeleteOrder = async () => {
+    if (!deletingId) return;
+    try {
+      const res = await fetch(`/api/orders/${deletingId}`, { method: 'DELETE' });
+      if (res.ok) {
+        toast.success('Order deleted!');
+        setDeletingId(null);
+        await fetchOrders();
+      } else {
+        const err = await res.json().catch(() => ({}));
+        toast.error(err.error || 'Failed to delete order');
+      }
+    } catch {
+      toast.error('Failed to delete order');
+    }
+  };
+
+  const deleteOrder = (orderId: string) => {
+    setDeletingId(orderId);
+  };
 
   const updateOrder = async (orderId: string, status: 'confirmed' | 'cancelled', items?: OrderItem[], customerName?: string, notes?: string) => {
     setUpdatingId(orderId);
@@ -349,32 +372,40 @@ export default function OrdersPage() {
                 )}
 
                 {/* Actions */}
-                {order.status === 'pending' && (
-                  <div className="flex gap-2 pt-2 border-t border-gray-100 dark:border-slate-700">
-                    <button
-                      onClick={() => setEditingOrder(order)}
-                      className="flex-1 bg-gray-100 dark:bg-slate-700 hover:bg-gray-200 dark:hover:bg-slate-600 text-gray-700 dark:text-gray-300 py-2.5 rounded-xl text-sm font-medium flex items-center justify-center gap-1.5 transition-colors"
-                    >
-                      <Edit2 size={16} />
-                      Edit
-                    </button>
-                    <button
-                      onClick={() => updateOrder(order._id, 'cancelled')}
-                      disabled={updatingId === order._id}
-                      className="px-4 py-2.5 bg-red-50 dark:bg-red-900/20 hover:bg-red-100 dark:hover:bg-red-900/40 text-red-600 dark:text-red-400 rounded-xl text-sm font-medium flex items-center justify-center gap-1.5 transition-colors disabled:opacity-50"
-                    >
-                      {updatingId === order._id ? <Loader2 size={16} className="animate-spin" /> : <XCircle size={16} />}
-                    </button>
-                    <button
-                      onClick={() => updateOrder(order._id, 'confirmed', order.items, order.customerName, order.notes)}
-                      disabled={updatingId === order._id}
-                      className="flex-1 bg-green-500 hover:bg-green-600 text-white py-2.5 rounded-xl text-sm font-medium flex items-center justify-center gap-1.5 transition-colors disabled:opacity-50"
-                    >
-                      {updatingId === order._id ? <Loader2 size={16} className="animate-spin" /> : <CheckCircle2 size={16} />}
-                      Confirm
-                    </button>
-                  </div>
-                )}
+                <div className="flex gap-2 pt-2 border-t border-gray-100 dark:border-slate-700">
+                  {order.status === 'pending' && (
+                    <>
+                      <button
+                        onClick={() => setEditingOrder(order)}
+                        className="flex-1 bg-gray-100 dark:bg-slate-700 hover:bg-gray-200 dark:hover:bg-slate-600 text-gray-700 dark:text-gray-300 py-2.5 rounded-xl text-sm font-medium flex items-center justify-center gap-1.5 transition-colors"
+                      >
+                        <Edit2 size={16} />
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => updateOrder(order._id, 'cancelled')}
+                        disabled={updatingId === order._id}
+                        className="px-4 py-2.5 bg-red-50 dark:bg-red-900/20 hover:bg-red-100 dark:hover:bg-red-900/40 text-red-600 dark:text-red-400 rounded-xl text-sm font-medium flex items-center justify-center gap-1.5 transition-colors disabled:opacity-50"
+                      >
+                        {updatingId === order._id ? <Loader2 size={16} className="animate-spin" /> : <XCircle size={16} />}
+                      </button>
+                      <button
+                        onClick={() => updateOrder(order._id, 'confirmed', order.items, order.customerName, order.notes)}
+                        disabled={updatingId === order._id}
+                        className="flex-1 bg-green-500 hover:bg-green-600 text-white py-2.5 rounded-xl text-sm font-medium flex items-center justify-center gap-1.5 transition-colors disabled:opacity-50"
+                      >
+                        {updatingId === order._id ? <Loader2 size={16} className="animate-spin" /> : <CheckCircle2 size={16} />}
+                        Confirm
+                      </button>
+                    </>
+                  )}
+                  <button
+                    onClick={() => deleteOrder(order._id)}
+                    className="px-4 py-2.5 bg-gray-100 dark:bg-slate-700 hover:bg-red-100 dark:hover:bg-red-900/20 text-red-600 dark:text-red-400 rounded-xl text-sm font-medium flex items-center justify-center gap-1.5 transition-colors"
+                  >
+                    <Trash2 size={16} />
+                  </button>
+                </div>
               </div>
             </motion.div>
           ))
@@ -496,6 +527,46 @@ export default function OrdersPage() {
                     )}
                   </button>
                 </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Delete Confirmation Modal */}
+      <AnimatePresence>
+        {deletingId && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 z-50 flex items-end sm:items-center justify-center"
+            onClick={() => setDeletingId(null)}
+          >
+            <motion.div
+              initial={{ y: 100 }}
+              animate={{ y: 0 }}
+              exit={{ y: 100 }}
+              onClick={(e) => e.stopPropagation()}
+              className="bg-white dark:bg-slate-800 rounded-t-2xl sm:rounded-2xl w-full max-w-md p-6 space-y-4"
+            >
+              <div>
+                <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">Delete Order?</h3>
+                <p className="text-sm text-gray-500 dark:text-gray-400">Are you sure you want to delete this order permanently? This action cannot be undone.</p>
+              </div>
+              <div className="flex gap-3">
+                <button
+                  onClick={() => setDeletingId(null)}
+                  className="flex-1 px-4 py-3 bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-gray-300 rounded-xl text-sm font-medium hover:bg-gray-200 dark:hover:bg-slate-600 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={confirmDeleteOrder}
+                  className="flex-1 px-4 py-3 bg-red-500 hover:bg-red-600 text-white rounded-xl text-sm font-medium transition-colors"
+                >
+                  Delete
+                </button>
               </div>
             </motion.div>
           </motion.div>
