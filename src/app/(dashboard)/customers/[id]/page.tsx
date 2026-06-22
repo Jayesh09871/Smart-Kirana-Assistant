@@ -202,12 +202,7 @@ export default function CustomerDetailPage() {
             <Plus size={16} />
             Record Payment
           </button>
-          <button
-            onClick={sendWhatsAppReminder}
-            className="bg-emerald-500 hover:bg-emerald-600 text-white p-2.5 rounded-xl transition-colors"
-          >
-            <MessageCircle size={18} />
-          </button>
+        
           <button
             onClick={() => setShowDeleteConfirm(true)}
             className="bg-red-50 dark:bg-red-900/20 hover:bg-red-100 dark:hover:bg-red-900/40 text-red-500 p-2.5 rounded-xl transition-colors"
