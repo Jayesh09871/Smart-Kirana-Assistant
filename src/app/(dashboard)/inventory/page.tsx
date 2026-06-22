@@ -324,9 +324,9 @@ export default function InventoryPage() {
               animate={{ y: 0 }}
               exit={{ y: 100 }}
               onClick={(e) => e.stopPropagation()}
-              className="bg-white dark:bg-slate-800 rounded-t-2xl sm:rounded-2xl w-full max-w-lg p-6 space-y-4"
+              className="bg-white dark:bg-slate-800 rounded-t-2xl sm:rounded-2xl w-full max-w-lg p-6 space-y-4 mb-96"
             >
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between ">
                 <h3 className="text-lg font-bold text-gray-900 dark:text-white">{t('inventory.addProduct')}</h3>
                 <button
                   onClick={() => setShowAddModal(false)}
